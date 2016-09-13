@@ -5,8 +5,10 @@ from vispy import gloo, io
 import rocket
 from rocket.aux import load_shaders
 
+SIZE, SCALE = 256, 2
+
 program = load_shaders('vertex.glsl', 'fragment.glsl')
-texture = np.random.randint(0, 255, size=(512, 512), dtype=np.uint8)
+texture = np.random.randint(0, 255, size=(SIZE, SIZE), dtype=np.uint8)
 vertices = np.array([
     (-1, +1), (+1, +1),
     (-1, -1), (+1, -1),
@@ -18,13 +20,21 @@ texcoords = np.array([
 
 
 def main():
-    rocket.prep(size=(512, 512))
-    rocket.launch()
+    rocket.prep(size=(SIZE, SIZE), scale=SCALE)
+    rocket.launch(fps=10)
+
+
+@rocket.attach
+def update():
+    #global texture
+    #texture = np.random.randint(0, 255, size=(SIZE, SIZE), dtype=np.uint8)
+    pass
 
 
 @rocket.attach
 def draw():
-    program['tex'] = texture
+    program['texel'] = 1.0/SIZE
+    program['tex'] = gloo.Texture2D(texture)
     program['vertex'] = gloo.VertexBuffer(vertices)
     program['texcoord'] = gloo.VertexBuffer(texcoords)
     program.draw('triangle_strip')
