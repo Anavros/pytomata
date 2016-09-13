@@ -1,9 +1,15 @@
 #!/usr/bin/env python3.4
 
+import numpy as np
+from vispy import gloo, io
 import rocket
-from rocket.aux import build_program
+from rocket.aux import load_shaders
 
-program = build_program('vertex.glsl', 'fragment.glsl')
+program = load_shaders('vertex.glsl', 'fragment.glsl')
+vertices = np.array([
+    (-1, +1), (+1, +1),
+    (-1, -1), (+1, -1),
+], dtype=np.float32)
 
 
 def main():
@@ -12,13 +18,10 @@ def main():
 
 
 @rocket.attach
-def update():
-    print("hello")
-
-
-@rocket.attach
 def draw():
-    pass
+    program['vert'] = gloo.VertexBuffer(vertices)
+    program.draw('triangle_strip')
+
 
 if __name__ == '__main__':
     main()
