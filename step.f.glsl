@@ -12,19 +12,19 @@ vec4 get(float x, float y) {
 
 void moore(void) {
     float sum = 0.0;
-    sum += get( 0.0, +1.0).r; // n
-    sum += get( 0.0, -1.0).r; // s
-    sum += get(+1.0,  0.0).r; // e
-    sum += get(-1.0,  0.0).r; // w
-    sum += get(+1.0, +1.0).r; // ne
-    sum += get(-1.0, +1.0).r; // nw
-    sum += get(+1.0, -1.0).r; // se
-    sum += get(-1.0, -1.0).r; // sw
+    sum += get( 0.0, +1.0).a; // n
+    sum += get( 0.0, -1.0).a; // s
+    sum += get(+1.0,  0.0).a; // e
+    sum += get(-1.0,  0.0).a; // w
+    sum += get(+1.0, +1.0).a; // ne
+    sum += get(-1.0, +1.0).a; // nw
+    sum += get(+1.0, -1.0).a; // se
+    sum += get(-1.0, -1.0).a; // sw
 
-    if(sum > 3.9) {
-        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    if(sum > 4.9) {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
     } else {
-        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
     }
 }
 

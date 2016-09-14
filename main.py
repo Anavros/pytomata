@@ -5,7 +5,7 @@ from vispy import gloo, io
 import rocket
 from rocket.aux import load_shaders
 
-SIZE, SCALE = 256, 2
+SIZE, SCALE = 512, 1
 
 step = load_shaders('vertex.glsl', 'step.f.glsl')
 show = load_shaders('vertex.glsl', 'show.f.glsl')
@@ -28,8 +28,8 @@ texcoords = np.array([
 ], dtype=np.float32)
 
 flip = False
-show_tex = gloo.Texture2D(show_img)
-step_tex = gloo.Texture2D(step_img)
+show_tex = gloo.Texture2D(show_img, wrapping='repeat')
+step_tex = gloo.Texture2D(step_img, wrapping='repeat')
 step_target = gloo.FrameBuffer(step_tex)
 step_target.resize((SIZE, SIZE))
 
@@ -43,25 +43,24 @@ show['step_buffer'] = step_tex
 step['show_buffer'] = show_tex
 
 
+
 def main():
-    rocket.prep(size=(SIZE, SIZE), scale=SCALE)
-    rocket.launch(fps=10, autoclear=False, enablealpha=False)
+    rocket.prep(size=(SIZE, SIZE), scale=SCALE, clear_color=(0, 0, 0))
+    rocket.launch(fps=2, autoclear=False, enablealpha=False)
 
 
 @rocket.attach
 def draw():
-    global flip
-    if flip:
-        show['step_buffer'] = show_tex
-        step['show_buffer'] = step_tex
-        flip = False
-    else:
-        show['step_buffer'] = step_tex
-        step['show_buffer'] = show_tex
-        flip = True
     step_target.activate()
     step.draw('triangle_strip')
+
+    # next frame
+    new_render = step_target.read()
     step_target.deactivate()
+    # first frame
+    step['show_buffer'] = new_render
+    show['step_buffer'] = new_render
+
     show.draw('triangle_strip')
 
 
