@@ -4,7 +4,7 @@ uniform sampler2D tex;
 uniform int back;
 uniform float texel;
 
-void main(void) {
+void moore(void) {
     float x = gl_TexCoord[0].x;
     float y = gl_TexCoord[0].y;
 
@@ -25,4 +25,9 @@ void main(void) {
     } else {
         gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
     }
+}
+
+void main(void) {
+    //moore();
+    gl_FragColor = texture2D(tex, gl_TexCoord[0].xy);
 }

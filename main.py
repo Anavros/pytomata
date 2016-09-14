@@ -25,11 +25,11 @@ texcoords = np.array([
     (0, 0), (1, 0),
 ], dtype=np.float32)
 
-turn = 1
+turn = 0
 tex_a = gloo.Texture2D(buffer)
-tex_b = gloo.Texture2D((SIZE, SIZE))
-fbo = gloo.FrameBuffer(tex_b, gloo.RenderBuffer((SIZE, SIZE)))
-#fbo.resize(SIZE, SIZE)
+tex_b = gloo.Texture2D(buffer)
+fbo = gloo.FrameBuffer(tex_b)
+fbo.resize((SIZE, SIZE))
 
 # only need to do this once
 program['tex'] = tex_a
@@ -37,24 +37,26 @@ program['vertex'] = gloo.VertexBuffer(vertices)
 program['texcoord'] = gloo.VertexBuffer(texcoords)
 program['texel'] = 1.0/SIZE
 
+
 def main():
     rocket.prep(size=(SIZE, SIZE), scale=SCALE)
-    rocket.launch(fps=10)
+    rocket.launch(fps=10, autoclear=False, enablealpha=False)
 
 
 @rocket.attach
 def draw():
     global turn
     turn += 1
-    if turn % 2:  # on every other turn
-        print("we're doing it!")
-        #fbo.activate()
+    if turn % 2 == 0:  # on every other turn
+        print(turn, "on")
+        fbo.activate()
+        gloo.clear(color=True)
         program.draw('triangle_strip')
     else:
-        print("and off")
-        #fbo.deactivate()
+        print(turn, "off")
+        fbo.deactivate()
+        gloo.clear(color=True)
         program.draw('triangle_strip')
-    print(turn)
 
 
 if __name__ == '__main__':
