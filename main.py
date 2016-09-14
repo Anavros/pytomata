@@ -46,7 +46,7 @@ step['show_buffer'] = show_tex
 
 def main():
     rocket.prep(size=(SIZE, SIZE), scale=SCALE, clear_color=(0, 0, 0))
-    rocket.launch(fps=2, autoclear=False, enablealpha=False)
+    rocket.launch(fps=60, autoclear=False, enablealpha=False)
 
 
 @rocket.attach

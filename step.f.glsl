@@ -20,11 +20,26 @@ void moore(void) {
     sum += get(-1.0, +1.0).a; // nw
     sum += get(+1.0, -1.0).a; // se
     sum += get(-1.0, -1.0).a; // sw
+    float alive = get(0.0, 0.0).a;
 
-    if(sum > 4.9) {
-        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    if(alive > 0.5) {
+        // live cell
+        if(1.5 < sum && sum < 3.5) {
+            // stays alive
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        } else {
+            // dies
+            gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+        }
     } else {
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+        // dead cell
+        if(2.5 < sum && sum < 3.5) {
+            // new cell is born
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        } else {
+            // stays dead
+            gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+        }
     }
 }
 
