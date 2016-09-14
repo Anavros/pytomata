@@ -1,6 +1,7 @@
 #version 120
 
 uniform sampler2D tex;
+uniform int back;
 uniform float texel;
 
 void main(void) {
